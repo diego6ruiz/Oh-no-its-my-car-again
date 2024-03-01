@@ -3,7 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Item
+  - FireExt
+  - Engine
+  - Seat
+  - Muffler
+  - Toolbox
+  - Wheel
+  - Car
+  - Interior
+  - Lights
+  - Fire
+  - PaintSpray
+  - Key
   layers:
   - Default
   - TransparentFX
