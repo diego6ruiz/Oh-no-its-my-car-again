@@ -1,28 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Make sure to include this for working with UI elements
 
 public class JaviScript : MonoBehaviour
 {
     public GameObject uiPanel; // Assign the UI Panel in the inspector
+    public GameObject hintPanel; // Assign the Text element from the canvas that you want to show temporarily
+    private bool isFirstTime = true; // Flag to check if it's the first time entering the trigger
+
+    private void Start()
+    {
+        if (hintPanel != null)
+        {
+            hintPanel.gameObject.SetActive(false); // Ensure the text is hidden at start
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the collider is tagged as "Player"
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && isFirstTime)
         {
-            // Activate the UI Panel
+            uiPanel.SetActive(true);
+            isFirstTime = false; 
+
+            if (hintPanel != null)
+            {
+                StartCoroutine(ShowHintText()); 
+            }
+
+        } else if (other.CompareTag("Player") && !isFirstTime) 
+        {
             uiPanel.SetActive(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // Check if the collider is tagged as "Player"
         if (other.CompareTag("Player"))
         {
-            // Deactivate the UI Panel when player leaves the trigger
             uiPanel.SetActive(false);
         }
+    }
+
+    IEnumerator ShowHintText()
+    {
+        hintPanel.SetActive(true); 
+        yield return new WaitForSeconds(5); 
+        hintPanel.SetActive(false); 
     }
 }

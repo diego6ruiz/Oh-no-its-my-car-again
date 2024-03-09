@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; 
 
 public class RC : MonoBehaviour
 {
@@ -10,7 +11,9 @@ public class RC : MonoBehaviour
     string activeTag = "";
 
     public GameObject FireExt, Engine, Seat, Muffler, Toolbox, Wheel, PaintSpray, Key, OnCarWheel, Interior, Lights, Fire, Exhaust1, Exhaust2, Car;
+    public TextMeshProUGUI textFireExt, textMuffler, textSeat, textEngine, textToolbox, textWheel, textPaint, textKey;
     private Dictionary<string, GameObject> tagToGameObjectMap;
+    public GameObject uiPanel;
 
     public int Score
     {
@@ -32,6 +35,8 @@ public class RC : MonoBehaviour
             {"PaintSpray", PaintSpray},
             {"Key", Key}
         };
+
+        uiPanel.SetActive(false);
         
     }
 
@@ -63,6 +68,11 @@ public class RC : MonoBehaviour
             isGrabbing = false;
         } */
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            uiPanel.SetActive(!uiPanel.activeSelf);
+        }
+
         /* if (Physics.Raycast(camRay, out hitInfo) && Input.GetKeyDown(KeyCode.E))
         {
             if (hitInfo.collider.CompareTag("Tortilla"))
@@ -74,6 +84,38 @@ public class RC : MonoBehaviour
             }
         } */
     }
+
+    private void UpdateChecklist(string item, bool isComplete)
+    {
+        switch (item)
+        {
+            case "FireExt":
+                textFireExt.text = isComplete ? "<s>1. Apagar el fuego </s>" : "1. Apagar el fuego ";
+                break;
+            case "Muffler":
+                textMuffler.text = isComplete ? "<s>2. Cambiar el tubo de escape </s>" : "2. Cambiar el tubo de escape ";
+                break;
+            case "Seat":
+                textSeat.text = isComplete ? "<s>3. Nuevos sillones </s>" : "3. Nuevos sillones ";
+                break;
+            case "Engine":
+                textEngine.text = isComplete ? "<s>4. Colocar un motor nuevo </s>" : "4. Colocar un motor nuevo ";
+                break;
+            case "Toolbox":
+                textToolbox.text = isComplete ? "<s>5. Reparar las luces delanteras </s>" : "5. Reparar las luces delanteras ";
+                break;
+            case "Wheel":
+                textWheel.text = isComplete ? "<s>6. Cambiar llanta pinchada </s>" : "6. Cambiar llanta pinchada ";
+                break;
+            case "PaintSpray":
+                textPaint.text = isComplete ? "<s>7. Pintura nueva </s>" : "7. Pintura nueva ";
+                break;
+            case "Key":
+                textKey.text = isComplete ? "<s>8. Tras hacer todo, prender el carro </s>" : "8. Tras hacer todo, prender el carro ";
+                break;
+        }
+    }
+
 
     private void HandleGrab(string tag, GameObject objectToDestroy)
     {
@@ -155,6 +197,7 @@ public class RC : MonoBehaviour
                 }
             }
             punt++;
+            UpdateChecklist(activeObj, true);
         }
         else if (tagToGameObjectMap.TryGetValue(activeObj, out go) && punt >= 7)
         {
